@@ -34,6 +34,12 @@ parser.add_argument('--cym-target-thickness', type=float, default=0.07,
                    help='Target thickness of the cyan layer in mm')
 parser.add_argument('--white-target-thickness', type=float, default=0.16,
                    help='Target thickness of the white layer in mm')
+parser.add_argument('--precise', action='store_true', default=False,
+                   help='Use the slow per-pixel optimizer (LUMINANCE) instead of '
+                        'the fast vectorized LINEAR color model. LINEAR is the '
+                        'default and is roughly 15-20x faster with comparable '
+                        'print results - only use --precise if a side-by-side '
+                        'test print shows LINEAR falling short for a given image.')
 
 args = parser.parse_args()
 
@@ -101,7 +107,7 @@ stl_config = StlConfig(
         cym_target_thickness=args.cym_target_thickness,
         white_target_thickness=args.white_target_thickness,
     ),
-    color_correction=ColorCorrection.LUMINANCE,
+    color_correction=ColorCorrection.LUMINANCE if args.precise else ColorCorrection.LINEAR,
     include_clear_filler=not args.no_clear,
     filament_library=filament_library
 )
