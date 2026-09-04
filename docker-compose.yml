@@ -1,0 +1,12 @@
+services:
+  lithophane-api:
+    build: .
+    container_name: lithophane-api
+    ports:
+      - "8082:8080"
+    volumes:
+      - lithophane_data:/data
+    restart: unless-stopped
+
+volumes:
+  lithophane_data:
